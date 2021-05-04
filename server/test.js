@@ -17,3 +17,4 @@ let ts2 = new TimeSeries(data2);
 let had = new HybridAnomalyDetector();
 had.learnNormal(ts);
 had.detect(ts2);
+console.log('hi');

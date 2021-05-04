@@ -13,6 +13,9 @@ app.get('/', (req, res) => {
 
 app.post('/api/model', (req, res) => {
     const model_type = req.query.model_type;
+    if (!adm.canOpenNewReq()) {
+        return res.status(503).json({error: true, msg: `Can't open new request at the moment!`});
+    }
     if (model_type != 'hybrid' && model_type != 'regression') {
         return res.status(400).json({error: true, msg: 'Please choose one of the following model types: hybrid/regression'});
     }
@@ -46,10 +49,14 @@ app.post('/api/anomaly', (req, res) => {
     const model_id = parseInt(req.query.model_id);
     const predict_data = req.body.predict_data;
 
+    if (!adm.canOpenNewReq()) {
+        return res.status(503).json({error: true, msg: `Can't open new request at the moment!`});
+    }
+
     if (!adm.training_finished(model_id)) {
         return res.redirect(303, `/api/model?model_id=${model_id}`)
     }
-    res.status(200).json({error: false, anomaly: adm.get_anomaly(model_id, predict_data)});
+    adm.get_anomaly(model_id, predict_data, res);
 })
 
 

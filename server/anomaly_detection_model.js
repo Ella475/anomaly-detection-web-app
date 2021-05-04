@@ -6,7 +6,28 @@ class anomaly_detection_model{
     constructor() {
         this.models = {};
         this.model_descriptors = {};
-        this.pids = [];
+        this.pending_detections = {}
+    }
+
+    canOpenNewReq() {
+        try {
+            let counter = 0;
+            for (let key in this.model_descriptors) {
+                if (this.model_descriptors[key].status == 'pending') {
+                    counter++;
+                }
+            }
+            counter += Object.keys(this.pending_detections).length;
+            console.log(Object.keys(this.pending_detections).length);
+            if (counter >= 20) {
+                return false;
+            }
+            return true;
+        }
+        catch (error){
+            // console.log(error);
+            return true;
+        }
     }
 
     getTimezoneOffset() {
@@ -15,7 +36,16 @@ class anomaly_detection_model{
         var sign = offset < 0? '+' : '-';
         offset = Math.abs(offset);
         return sign + z(offset/60 | 0)+ '.' + z(offset%60);
-      }
+    }
+
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async learn_async(model_id, ts) {
+        this.models[model_id].learnNormal(ts);
+        // await this.sleep(30000);
+    }
 
     train_model(model_type, data) {
         let ts = new TimeSeries(data);
@@ -26,13 +56,17 @@ class anomaly_detection_model{
         else {
             model = new SimpleAnomalyDetector();
         }
-        model.learnNormal(ts);
         let model_id = Object.keys(this.models).length;
         let d = new Date();
         let model_date = d.toISOString().split('.', 1) + this.getTimezoneOffset();
-        let status = 'ready';
-        this.models[model_id] = model;
+        let status = 'pending';
         this.model_descriptors[model_id] = {model_id: model_id, upload_time: model_date, status: status};
+        this.models[model_id] = model; 
+
+        this.learn_async(model_id, ts).then(() => {
+            this.model_descriptors[model_id].status = 'ready';
+        });
+
         return this.model_descriptors[model_id];
     };
     
@@ -61,12 +95,27 @@ class anomaly_detection_model{
     };
     
     training_finished(model_id) {
-        return 1;
+        if (this.model_descriptors[model_id].status == 'ready')
+            return 1;
+        return 0;
     };
     
-    get_anomaly(model_id, predict_data) {
+    async detect_async(model_id, ts, detect_id) {
+        this.pending_detections[detect_id] = this.models[model_id].detect(ts);
+        await this.sleep(2000);
+        console.log('bi');
+    }
+
+    get_anomaly(model_id, predict_data, res) {
         let ts = new TimeSeries(predict_data);
-        return this.models[model_id].detect(ts);
+        let detect_id = Object.keys(this.pending_detections).length;
+        this.pending_detections[detect_id] = 1;
+
+        this.detect_async(model_id, ts, detect_id).then(() => {
+            let result = this.pending_detections[detect_id];
+            delete this.pending_detections[detect_id];
+            res.status(200).json({error: false, res: result});
+        });
     };
 }
 
