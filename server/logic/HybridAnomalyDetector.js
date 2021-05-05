@@ -25,6 +25,12 @@ class HybridAnomalyDetector extends SimpleAnomalyDetector{
         return (c.corrlation>=this.threshold && super.isAnomalous(x,y,c)) ||
                 (c.corrlation>0.5 && c.corrlation<this.threshold && Math.hypot(c.cx-x, c.cy-y)>c.threshold);
     }
+
+    deviation(x, y, c){
+        if (c.corrlation>=this.threshold)
+            return super.deviation(x,y,c);
+        return Math.round(100 * (Math.hypot(c.cx-x, c.cy-y) / c.threshold));
+    }
 }
 
 module.exports = HybridAnomalyDetector;

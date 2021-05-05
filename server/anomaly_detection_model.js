@@ -18,7 +18,6 @@ class anomaly_detection_model{
                 }
             }
             counter += Object.keys(this.pending_detections).length;
-            console.log(Object.keys(this.pending_detections).length);
             if (counter >= 20) {
                 return false;
             }
@@ -44,7 +43,7 @@ class anomaly_detection_model{
 
     async learn_async(model_id, ts) {
         this.models[model_id].learnNormal(ts);
-        // await this.sleep(30000);
+        // await this.sleep(5000);
     }
 
     train_model(model_type, data) {
@@ -102,8 +101,7 @@ class anomaly_detection_model{
     
     async detect_async(model_id, ts, detect_id) {
         this.pending_detections[detect_id] = this.models[model_id].detect(ts);
-        await this.sleep(2000);
-        console.log('bi');
+        // await this.sleep(5000);
     }
 
     get_anomaly(model_id, predict_data, res) {

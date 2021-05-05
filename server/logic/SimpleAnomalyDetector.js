@@ -73,21 +73,21 @@ class SimpleAnomalyDetector {
 		let startTimes = [];
 		let endTimes = [];
         let descriptions = [];
-		
         let description;
+		
 		let prevTimeStep;
 		let sequence = false;
 		for (const anomaly of ar) {
 			if (!sequence) {
-				description = anomaly.description;
 				startTimes.push(anomaly.timeStep);
-                descriptions.push(anomaly.description);
+                description = anomaly.description;
+                descriptions.push(description);
 				sequence = true;
 			}
 			else if (anomaly.description != description || anomaly.timeStep != prevTimeStep + 1) {
-				description = anomaly.description;
 				startTimes.push(anomaly.timeStep);
-                descriptions.push(anomaly.description);
+                description = anomaly.description;
+                descriptions.push(description);
 				endTimes.push(prevTimeStep + 1);
 			}
 			prevTimeStep = anomaly.timeStep;
@@ -103,17 +103,19 @@ class SimpleAnomalyDetector {
         }
 
         for (let i = 0; i < startTimes.length; i++) {
-            let features = descriptions[i].split('-');
-            let f1 = features[0];
-            let f2 = features[1];
+            description = descriptions[i];
+            let f1 = description.f1;
+            let f2 = description.f2;
 
             let span = [startTimes[i], endTimes[i]];
             
             anomalies[f1].push(span);
-            reason[f1].push(f2);
+            reason[f1].push({correlated_feature: f2, correlation: description.correlation, 
+                            correlation_type: description.type, span_starting_deviation: description.deviation + '%'});
 
             anomalies[f2].push(span);
-            reason[f2].push(f1);
+            reason[f2].push({correlated_feature: f1, correlation: description.correlation, 
+                correlation_type: description.type, span_starting_deviation: description.deviation + '%'});
         }
         return {anomalies: anomalies, reason: reason};
 	}
@@ -123,9 +125,19 @@ class SimpleAnomalyDetector {
         for(const c of this.cf){
             let x=ts.getAttributeData(c.feature1);
             let y=ts.getAttributeData(c.feature2);
+
+            let type;
+            if (c.hasOwnProperty('lin_reg')) {
+                type = 'linear';
+            }
+            else {
+                type = 'scatter';
+            }
+
             for(let i=0;i<x.length;i++){
                 if(this.isAnomalous(x[i],y[i],c)){
-                    let d=c.feature1 + "-" + c.feature2;
+                    let d= {f1: c.feature1, f2: c.feature2, type: type, 
+                            correlation: c.correlation, deviation: this.deviation(x[i], y[i], c)};
                     v.push({description: d, timeStep: i+1});
                 }
             }
@@ -136,6 +148,10 @@ class SimpleAnomalyDetector {
     
     isAnomalous(x, y, c){
         return (Math.abs(y - c.lin_reg.f(x))>c.threshold);
+    }
+
+    deviation(x, y, c){
+        return Math.round(100 * (Math.abs(y - c.lin_reg.f(x)) / c.threshold));
     }
 }
 
