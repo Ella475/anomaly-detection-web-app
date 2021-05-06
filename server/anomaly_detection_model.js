@@ -106,6 +106,11 @@ class anomaly_detection_model{
 
     get_anomaly(model_id, predict_data, res) {
         let ts = new TimeSeries(predict_data);
+
+        if (!(this.models[model_id].attributes.every(val => ts.gettAttributes().includes(val)))) {
+            return res.status(400).json({error: true, msg: `Can't match all attributes of train data`});
+        }
+
         let detect_id = Object.keys(this.pending_detections).length;
         this.pending_detections[detect_id] = 1;
 
