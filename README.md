@@ -6,21 +6,30 @@ clone the repository
 ```bash
 git clone https://github.com/Ella475/anomaly-detection-web-app.git
 ```
+
 install nodejs
 ```bash
 sudo apt install nodejs
 ```
+
 install npm package manager
 ```bash
 sudo apt install npm
 ```
-intall all dependencies (inside directory of package.json)
+
+install all dependencies (inside directory of package.json)
 ```bash
-npm install
+pushd server; npm install; popd
+pushd client; npm install; popd
 ``` 
 
 ### Run:
 run the server
 ```bash
-npm start
+cd server; npm start
+```
+
+run the client
+```bash
+cd client; npm start
 ```
