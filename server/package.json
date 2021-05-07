@@ -2,9 +2,10 @@
   "name": "anomaly_detection_server",
   "version": "1.0.0",
   "description": "",
-  "main": "server/app.js",
+  "main": "app.js",
+  "test": "test.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "nodemon test",
     "start": "nodemon main"
   },
   "author": "",
