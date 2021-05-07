@@ -1,11 +1,26 @@
 # anomaly-detection-web-app
 
-# Server:
-## Install:
-### * git clone https://github.com/Ella475/anomaly-detection-web-app.git
-### * sudo apt install nodejs
-### * sudo apt install npm
-### * npm install (inside directory of package.json)
+## Server:
+### Install:
+clone the repository
+```bash
+git clone https://github.com/Ella475/anomaly-detection-web-app.git
+```
+install nodejs
+```bash
+sudo apt install nodejs
+```
+install npm package manager
+```bash
+sudo apt install npm
+```
+intall all dependencies (inside directory of package.json)
+```bash
+npm install
+``` 
 
-## Run:
-### * npm start
+### Run:
+run the server
+```bash
+npm start
+```
