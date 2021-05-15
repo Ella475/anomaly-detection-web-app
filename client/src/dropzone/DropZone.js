@@ -55,7 +55,7 @@ const fileDrop = (e) => {
         }
         // if the request was to the train flight
         if (e.target.id === "train") {
-            var model_type = "regression"; // TODO: Let user decide
+            var model_type = document.getElementsByClassName("detector_buttons").id
             params = new URLSearchParams({ model_type: model_type });
             body = JSON.stringify({ train_data: parse_csv(reader.result) });
             api_req = "model";
