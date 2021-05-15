@@ -24,20 +24,16 @@ app.get("/", (req, res) => {
 app.post("/api/model", (req, res) => {
     const model_type = req.query.model_type;
     if (!adm.canOpenNewReq()) {
-        return res
-            .status(503)
-            .json({
-                error: true,
-                msg: `Can't open new request at the moment!`,
-            });
+        return res.status(503).json({
+            error: true,
+            msg: `Can't open new request at the moment!`,
+        });
     }
     if (model_type != "hybrid" && model_type != "regression") {
-        return res
-            .status(400)
-            .json({
-                error: true,
-                msg: "Please choose one of the following model types: hybrid/regression",
-            });
+        return res.status(400).json({
+            error: true,
+            msg: "Please choose one of the following model types: hybrid/regression",
+        });
     }
 
     const train_data = req.body.train_data;
@@ -51,12 +47,10 @@ app.get("/api/model", (req, res) => {
     const model_id = parseInt(req.query.model_id);
     let model = adm.get_model(model_id);
     if (model == null) {
-        return res
-            .status(404)
-            .json({
-                error: true,
-                msg: `Couldn't find model with id: ${model_id}`,
-            });
+        return res.status(404).json({
+            error: true,
+            msg: `Couldn't find model with id: ${model_id}`,
+        });
     }
     res.status(200).json({ error: false, model: model });
 });
@@ -64,12 +58,10 @@ app.get("/api/model", (req, res) => {
 app.delete("/api/model", (req, res) => {
     const model_id = parseInt(req.query.model_id);
     if (!adm.delete_model(model_id)) {
-        return res
-            .status(404)
-            .json({
-                error: true,
-                msg: `Couldn't find model with id: ${model_id}`,
-            });
+        return res.status(404).json({
+            error: true,
+            msg: `Couldn't find model with id: ${model_id}`,
+        });
     }
     res.status(200).json({ error: false });
 });
@@ -83,12 +75,10 @@ app.post("/api/anomaly", (req, res) => {
     const predict_data = req.body.predict_data;
 
     if (!adm.canOpenNewReq()) {
-        return res
-            .status(503)
-            .json({
-                error: true,
-                msg: `Can't open new request at the moment!`,
-            });
+        return res.status(503).json({
+            error: true,
+            msg: `Can't open new request at the moment!`,
+        });
     }
 
     if (!adm.training_finished(model_id)) {
