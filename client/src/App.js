@@ -11,11 +11,11 @@ function App() {
           <div className="row">
             <div className="column">
               <p id="train" className="drop-box-title">Train File</p>
-              <DropZone />
+              <DropZone id={'train'}/>
             </div>
             <div className="column">
               <p className="drop-box-title">Anomaly File</p>
-              <DropZone />
+              <DropZone id={'anomaly'}/>
             </div>
           </div>
         </div>
