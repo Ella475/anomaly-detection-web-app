@@ -1,13 +1,10 @@
-.container {
-    transform: translateY(-100%);
-}
-
 .container p {
     color: red;
     text-align: center;
 }
 
 .drop-container {
+    background-color: white;
     display: flex;
     align-items: center;
     justify-content: center;
