@@ -55,13 +55,14 @@ const fileDrop = (e) => {
         }
         // if the request was to the train flight
         if (e.target.id === "train") {
-            var model_type = document.getElementsByClassName("detector_buttons").id
+            var model_type =
+                document.getElementsByClassName("detector_buttons").id;
             params = new URLSearchParams({ model_type: model_type });
             body = JSON.stringify({ train_data: parse_csv(reader.result) });
             api_req = "model";
         } else if (e.target.id === "anomaly") {
-            // if the request is using regression/ circle algorithm
-            var model_id = 0; // TODO:
+            var model_id = document.getElementsByClassName("dropbtn")[0].id;
+
             params = new URLSearchParams({ model_id: model_id });
             body = JSON.stringify({ predict_data: parse_csv(reader.result) });
             api_req = "anomaly";
@@ -108,7 +109,26 @@ const fileDrop = (e) => {
 
                 var response_json = JSON.parse(xhr.response);
                 if (e.target.id === "train") {
+                    // Add model_id to model_list
                     alert(JSON.stringify(response_json["model"]));
+
+                    var model_list_element =
+                        document.getElementsByClassName("dropdown-content")[0];
+                    var new_model_id_element = document.createElement("a");
+                    new_model_id_element.href = "#";
+                    new_model_id_element.text =
+                        document.getElementsByClassName("detector_buttons").id +
+                        ": " +
+                        response_json["model"]["model_id"];
+                    new_model_id_element.onclick = function (e) {
+                        e.preventDefault();
+                        document.getElementsByClassName("dropbtn")[0].id =
+                            response_json["model"]["model_id"];
+                    };
+                    model_list_element.appendChild(new_model_id_element);
+                } else if (e.target.id === "anomaly") {
+                    // TODO: Parse response JSON to graph view
+                    alert(JSON.stringify(response_json));
                 }
             }
         };

@@ -12,6 +12,26 @@ function App() {
             e.target.innerText.toLowerCase();
     }
 
+    /* When the user clicks on the button,
+    toggle between hiding and showing the dropdown content */
+    function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    // Close the dropdown menu if the user clicks outside of it
+    window.onclick = function (event) {
+        if (!event.target.matches(".dropbtn")) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains("show")) {
+                    openDropdown.classList.remove("show");
+                }
+            }
+        }
+    };
+
     return (
         <div>
             <p className="title">Upload CSV files</p>
@@ -34,6 +54,20 @@ function App() {
                     <div className="column">
                         <p className="drop-box-title">Anomaly File</p>
                         <DropZone id={"anomaly"} />
+                        <div className="model_list">
+                            <div className="dropdown">
+                                <button
+                                    onClick={myFunction}
+                                    className="dropbtn"
+                                >
+                                    Model List
+                                </button>
+                                <div
+                                    id="myDropdown"
+                                    className="dropdown-content"
+                                ></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
