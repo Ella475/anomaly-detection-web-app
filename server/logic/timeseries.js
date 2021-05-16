@@ -1,4 +1,4 @@
-class TimeSeries{
+class TimeSeries {
     constructor(data) {
         this.data = data;
     }
@@ -7,12 +7,12 @@ class TimeSeries{
         return this.data[name];
     }
 
-    gettAttributes() {
+    getAttributes() {
         return Object.keys(this.data);
     }
 
     getRowSize() {
-        return this.data[this.gettAttributes()[0]].length;
+        return this.data[this.getAttributes()[0]].length;
     }
 }
 
