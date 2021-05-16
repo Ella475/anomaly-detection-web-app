@@ -60,16 +60,17 @@ const fileDrop = (e) => {
             params = new URLSearchParams({ model_type: model_type });
             body = JSON.stringify({ train_data: parse_csv(reader.result) });
             api_req = "model";
-        } else if (e.target.id === "anomaly") {
+        } else if (e.target.id === "anomaly") { // if the file is for anomaly
             var model_id = document.getElementsByClassName("dropbtn")[0].id;
-
+            // set request details
             params = new URLSearchParams({ model_id: model_id });
+            // convert to json file
             body = JSON.stringify({ predict_data: parse_csv(reader.result) });
             api_req = "anomaly";
         } else {
             return;
         }
-
+        // set loading image
         icon.style.background = "url(" + loading + ") no-repeat center center";
         icon.style.backgroundSize = "100%";
 
@@ -96,6 +97,7 @@ const fileDrop = (e) => {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 // if the status is success is 200 ok
                 var success = xhr.status === 200;
+                // set image according to the request status
                 if (success) {
                     icon.style.background =
                         "url(" + approve + ") no-repeat center center";
@@ -110,8 +112,9 @@ const fileDrop = (e) => {
                 var response_json = JSON.parse(xhr.response);
                 if (e.target.id === "train") {
                     // Add model_id to model_list
+                    // todo: remove after Noam and Tal will finish 
                     alert(JSON.stringify(response_json["model"]));
-
+                    // set model in model-list
                     var model_list_element =
                         document.getElementsByClassName("dropdown-content")[0];
                     var new_model_id_element = document.createElement("a");
@@ -120,14 +123,17 @@ const fileDrop = (e) => {
                         document.getElementsByClassName("detector_buttons").id +
                         ": " +
                         response_json["model"]["model_id"];
+                        // handel choosing something from the list of the models
                     new_model_id_element.onclick = function (e) {
                         e.preventDefault();
+                        // change dropbtn-id according to the model that chosen in order to save it
                         document.getElementsByClassName("dropbtn")[0].id =
                             response_json["model"]["model_id"];
                     };
+                    // add to list
                     model_list_element.appendChild(new_model_id_element);
                 } else if (e.target.id === "anomaly") {
-                    // TODO: Parse response JSON to graph view
+                    // TODO: Parse response JSON to graph view - Tal & Noam part
                     alert(JSON.stringify(response_json));
                 }
             }
