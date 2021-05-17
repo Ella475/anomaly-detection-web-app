@@ -1,7 +1,6 @@
 # Anomaly Detection WebApp
 
-## Server
-### Installation
+## Installation
 1. Clone the repository
 ```bash
 git clone https://github.com/Ella475/anomaly-detection-web-app.git
@@ -21,7 +20,13 @@ sudo apt install npm
 ```bash
 pushd server; npm install; popd
 pushd client; npm install; popd
-``` 
+```
+
+5. Install yarn
+```bash
+npm install -g yarn
+```
+
 ## Client
 
 ### Training And Detecting
