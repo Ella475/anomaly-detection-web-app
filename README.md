@@ -40,7 +40,7 @@ to the right box.
 ### Graphs And Tables
 
 ## Running The Application
-# In two different terminals:
+### In two different terminals:
 Run the server
 ```bash
 cd server; npm start
