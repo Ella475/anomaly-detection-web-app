@@ -24,7 +24,7 @@ pushd client; npm install; popd
 
 5. Install yarn
 ```bash
-npm install -g yarn
+sudo npm install -g yarn
 ```
 
 ## Client
@@ -40,6 +40,7 @@ to the right box.
 ### Graphs And Tables
 
 ## Running The Application
+# In two different terminals:
 Run the server
 ```bash
 cd server; npm start
