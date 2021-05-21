@@ -86,6 +86,8 @@ body {
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
     border-radius: 0.25rem;
+    max-height: 200px;
+    overflow-y: scroll;
 }
 
 /* Links inside the dropdown */
@@ -95,6 +97,7 @@ body {
     border-radius: 0.25rem;
     text-decoration: none;
     display: block;
+    min-width: 200px;
 }
 
 /* Change color of dropdown links on hover */
