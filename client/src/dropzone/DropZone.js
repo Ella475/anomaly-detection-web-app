@@ -112,9 +112,6 @@ const fileDrop = (e) => {
                 var response_json = JSON.parse(xhr.response);
                 if (e.target.id === "train") {
                     // Add model_id to model_list
-                    // todo: remove after Noam and Tal will finish 
-                    alert(JSON.stringify(response_json["model"]));
-                    // set model in model-list
                     var model_list_element =
                         document.getElementsByClassName("dropdown-content")[0];
                     var new_model_id_element = document.createElement("a");
@@ -122,7 +119,7 @@ const fileDrop = (e) => {
                     new_model_id_element.text =
                         document.getElementsByClassName("detector_buttons").id +
                         ": " +
-                        response_json["model"]["model_id"];
+                        response_json["model"]["model_id"] + " - pending";
                         // handel choosing something from the list of the models
                     new_model_id_element.onclick = function (e) {
                         e.preventDefault();
