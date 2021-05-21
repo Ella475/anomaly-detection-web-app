@@ -113,7 +113,7 @@ const fileDrop = (e) => {
                 if (e.target.id === "train") {
                     // Add model_id to model_list
                     var model_list_element =
-                        document.getElementsByClassName("dropdown-content")[0];
+                        document.getElementsByClassName("simplebar-content")[0];
                     var new_model_id_element = document.createElement("a");
                     new_model_id_element.href = "#";
                     new_model_id_element.text =

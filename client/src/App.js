@@ -3,6 +3,9 @@ import DropZone from "./dropzone/DropZone";
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+import SimpleBar from "simplebar-react";
+import "simplebar/dist/simplebar.min.css";
+
 import "./App.css";
 
 function App() {
@@ -16,11 +19,7 @@ function App() {
     toggle between hiding and showing the dropdown content */
     function myFunction() {
         var xhr = new XMLHttpRequest();
-        xhr.open(
-            "GET",
-            "http://localhost:9876/api/models",
-            true
-        );
+        xhr.open("GET", "http://localhost:9876/api/models", true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
         xhr.setRequestHeader(
@@ -39,10 +38,14 @@ function App() {
             }
 
             var response_json = JSON.parse(xhr.response);
-            var model_list_element = document.getElementsByClassName("dropdown-content")[0];
+            var model_list_element =
+                document.getElementsByClassName("simplebar-content")[0];
             for (var i = 0; i < model_list_element.children.length; i++) {
-                var text = model_list_element.children[i].innerText.split(" - ")[0];
-                var model_id = parseInt(model_list_element.children[i].innerText.split(" ")[1]);
+                var text =
+                    model_list_element.children[i].innerText.split(" - ")[0];
+                var model_id = parseInt(
+                    model_list_element.children[i].innerText.split(" ")[1]
+                );
 
                 for (var j = 0; j < response_json["models"].length; j++) {
                     if (response_json["models"][j]["model_id"] === model_id) {
@@ -55,7 +58,7 @@ function App() {
             }
 
             document.getElementById("myDropdown").classList.toggle("show");
-        }
+        };
     }
 
     // Close the dropdown menu if the user clicks outside of it
@@ -102,10 +105,17 @@ function App() {
                                 >
                                     Model List
                                 </button>
-                                <div
+
+                                <SimpleBar
                                     id="myDropdown"
                                     className="dropdown-content"
-                                ></div>
+                                >
+                                    {/* 
+                                    This empty div MUST be here, otherwise inner divs of SimpleBar
+                                    Are not created.
+                                     */}
+                                    <div></div>
+                                </SimpleBar>
                             </div>
                         </div>
                     </div>
