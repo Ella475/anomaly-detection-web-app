@@ -66,6 +66,7 @@ const fileDrop = (e) => {
             params = new URLSearchParams({ model_id: model_id });
             // convert to json file
             body = JSON.stringify({ predict_data: parse_csv(reader.result) });
+            window.localStorage.setItem("anomaly_json", body);
             api_req = "anomaly";
         } else {
             return;
@@ -130,8 +131,14 @@ const fileDrop = (e) => {
                     // add to list
                     model_list_element.appendChild(new_model_id_element);
                 } else if (e.target.id === "anomaly") {
-                    // TODO: Parse response JSON to graph view - Tal & Noam part
                     alert(JSON.stringify(response_json));
+
+                    // Save result in local storage
+                    window.localStorage.setItem("detected_anomalies_json", JSON.stringify(response_json));
+
+                    // Notify graphs that we got the anomalies
+                    var event = new CustomEvent("anomaliesDetected");
+                    window.dispatchEvent(event);
                 }
             }
         };

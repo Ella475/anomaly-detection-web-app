@@ -7,6 +7,7 @@ import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 
 import "./App.css";
+import Graphs from "./graphs/Graphs";
 
 function App() {
     function handleClick(e) {
@@ -119,6 +120,9 @@ function App() {
                             </div>
                         </div>
                     </div>
+                </div>
+                <div className="row">
+                    <Graphs />
                 </div>
             </div>
         </div>
