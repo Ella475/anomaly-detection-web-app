@@ -7,7 +7,7 @@ import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 
 import "./App.css";
-import Graphs from "./graphs/Graphs";
+import Charts from "./charts/Charts";
 
 function App() {
     function handleClick(e) {
@@ -122,7 +122,7 @@ function App() {
                     </div>
                 </div>
                 <div className="row">
-                    <Graphs />
+                    <Charts />
                 </div>
             </div>
         </div>

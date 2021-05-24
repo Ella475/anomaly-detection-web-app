@@ -66,11 +66,16 @@ const fileDrop = (e) => {
             params = new URLSearchParams({ model_id: model_id });
             // convert to json file
             body = JSON.stringify({ predict_data: parse_csv(reader.result) });
-            window.localStorage.setItem("anomaly_json", body);
             api_req = "anomaly";
         } else {
             return;
         }
+        //add global item
+        var json =  JSON.stringify(parse_csv(reader.result));
+        window.localStorage.setItem("json_info", json);
+        // Notify graphs that we got new file
+        var newFileevent = new CustomEvent("newFileEvent");
+        window.dispatchEvent(newFileevent);
         // set loading image
         icon.style.background = "url(" + loading + ") no-repeat center center";
         icon.style.backgroundSize = "100%";
@@ -131,10 +136,8 @@ const fileDrop = (e) => {
                     // add to list
                     model_list_element.appendChild(new_model_id_element);
                 } else if (e.target.id === "anomaly") {
-                    alert(JSON.stringify(response_json));
-
                     // Save result in local storage
-                    window.localStorage.setItem("detected_anomalies_json", JSON.stringify(response_json));
+                    window.localStorage.setItem("detected_anomalies_json", JSON.stringify(response_json["res"]));
 
                     // Notify graphs that we got the anomalies
                     var event = new CustomEvent("anomaliesDetected");
@@ -159,7 +162,7 @@ class DropZone extends Component {
                 >
                     <div id={this.props.id} className="drop-message">
                         <div className="upload-icon" />
-                        Drag & Drop files here or click to upload
+                        Drag & Drop files here
                     </div>
                 </div>
             </div>
