@@ -1,11 +1,37 @@
+/* define the line chart zone */
 .line_chart {
-  background-color: rgb(255, 255, 255); /*?*/
+  background-color: rgb(255, 255, 255);
   display: flex;
   width: 850px;
+  position: absolute;
+  top: 450px;
+  left: 250px;
+
+}
+ /* define the anomalies data cell */
+.td_anomaly {
+  background:rgb(255, 99, 132);
+  color: #112;
+  transition: 0.4s ease-out, color 0.4s ease-out;
+  cursor: pointer;
+}
+.td_anomaly:first-of-type:hover {
+  background: #112;
+  color: rgb(255, 99, 132);
+  transition: 0.4s ease-in, color 0.4s ease-in;
 }
 
-/* key Button */
-.keybtn {
+/* define the table zone */
+.table {
+  background-color: rgb(255, 255, 255);
+  position: absolute;
+  width: 850px;
+  top:900px;
+  left: 250px;
+}
+
+/* feature Button */
+.featurebtn {
   background-color: #007bff;
   border-radius: 0.25rem;
   color: white;
@@ -19,21 +45,20 @@
   width: 150px;
 }
 
-/* key button on hover & focus */
-.keybtn:hover,
-.keybtn:focus {
+/* feature button on hover & focus */
+.featurebtn:hover,
+.featurebtn:focus {
   background-color: #2980b9;
   transition: color 0.15s;
 }
 
-/* The container <div> - needed to position the dropdown content */
-.keys {
+.features {
   position: relative;
   display: inline-block;
 }
 
-/* key Content (Hidden by Default) */
-.key-content {
+/* feature Content (Hidden by Default) */
+.feature-content {
   display: none;
   position: absolute;
   background-color: #bff8ff;
@@ -44,8 +69,8 @@
   max-height: 300px;
 }
 
-/* Links inside the key */
-.key-content a {
+/* links inside the feature */
+.feature-content a {
   color: black;
   padding: 12px 16px;
   border-radius: 0.25rem;
@@ -54,12 +79,12 @@
   min-width: 200px;
 }
 
-/* Change color of dropdown links on hover */
-.key-content a:hover {
+/* change color of feature links on hover */
+.feature-content a:hover {
   background-color: rgb(96, 205, 255);
 }
 
-/* Show the keys menu (use JS to add this class to the .key-content container when the user clicks on the key button) */
+/* show the features list */
 .show {
   display: block;
 }

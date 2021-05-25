@@ -1,16 +1,17 @@
 import React, { Component } from "react";
 
 import { Line } from 'react-chartjs-2'
-
 import "./Charts.css"
 
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 
-var exist = "0";
+//global variables
 var feature = "";
 var anomaly = false;
+var exist = false;
 
+/** display an empty line chart (before a file is uploaded) */
 function EmptyLineChart(){
     const data = {
         labels: [],
@@ -24,10 +25,12 @@ function EmptyLineChart(){
     return <Line data={data}></Line>
 }
 
+/** parse the uploaded file data and create the features list */
 function LineChartHelper(){
     var jsonInfo = JSON.parse(window.localStorage.getItem("json_info"));
     var keys = Object.keys(jsonInfo);
     var arr = Array.from(Array(jsonInfo[keys[0]].length).keys());
+    //temporarily empty line chart data
     var data = {
       labels: arr,
       datasets: [
@@ -39,40 +42,42 @@ function LineChartHelper(){
     };
     var i=0;
     //add all keys to keys list
-    if (exist === "0") {
+    if (!exist) {
         keys.forEach((key) => {
             var i = 0;
-            // set model in model-list
-            var key_list_element = document.getElementsByClassName("simplebar-content")[0];
-            var new_key_name_element = document.createElement("a");
-            new_key_name_element.href = "#";
-            new_key_name_element.text = key;
-            // handel choosing something from the list of the features
-            new_key_name_element.onclick = function (e) {
+            // set the feature-list in the variable 'feature_list_element'
+            var feature_list_element = document.getElementsByClassName("simplebar-content")[0];
+            var new_feature_name_element = document.createElement("a");
+            new_feature_name_element.href = "#";
+            new_feature_name_element.text = key;
+            // handel choosing something from the features list
+            new_feature_name_element.onclick = function (e) {
                 e.preventDefault();
-                // change keybtn-id according to jsonInfo
-                if (document.getElementsByClassName("keybtn")[0].id === jsonInfo[key]) {
-                    i = 1;
-                }
-                document.getElementsByClassName("keybtn")[0].id = jsonInfo[key];
+                // change featurebtn-id to feature's name
+                document.getElementsByClassName("featurebtn")[0].id = key;
+                //save the key in global variable 'feature'
                 feature = key;
-                var newFileevent = new CustomEvent("chartChanged");
-                window.dispatchEvent(newFileevent);
+                //add a new event when the user clicks to change the feature
+                var newFeatureEvent = new CustomEvent("chartChanged");
+                window.dispatchEvent(newFeatureEvent);
             };  
-            // add to list
-            key_list_element.appendChild(new_key_name_element);
+            // add the feature to the list
+            feature_list_element.appendChild(new_feature_name_element);
         });
     }
-    exist = "1";
+    exist = true;
     return <Line data={data}></Line>    
 }
 
-function LineChart() {
+/** create a new line chart for the selected feature */
+function NewFeatureLineChart() {
     var jsonInfo = JSON.parse(window.localStorage.getItem("json_info"));
+    //if we got response from the server about potential anomalies
     if (anomaly === true) {
         var jsonAnomalies = JSON.parse(window.localStorage.getItem("detected_anomalies_json"));
         var arr=jsonAnomalies["anomalies"][feature];
     }
+    //set the data for the line chart
     let data = {
         labels: Array.from(Array(jsonInfo[feature].length).keys()),
         datasets: [
@@ -81,6 +86,7 @@ function LineChart() {
                 data: jsonInfo[feature],
                 backgroundColor: "rgba(0,123,255)",
                 pointRadius: 0.7, 
+                //set point color to red if an anomaly was detected and blue otherwise
                 pointBackgroundColor: function(context) {
                     var index = context.dataIndex;
                     var b = false;
@@ -111,6 +117,7 @@ function LineChart() {
             }
         ]
     }
+    //set the options for the line chart
     let options = {
       interaction: {
         intersect: false,
@@ -120,6 +127,7 @@ function LineChart() {
         tooltip: {
           usePointStyle: true,
           callbacks: {
+            //if an anomaly was detected display the reason for the anomaly
             footer: function (context) {
               if (anomaly) {
                 return jsonAnomalies["reason"][feature];
@@ -132,23 +140,95 @@ function LineChart() {
     return <Line data={data} options={options}></Line>
 }
 
-function myFunction() {
-    document.getElementById("myKey").classList.toggle("show");
+/** display an empty table (before a file is uploaded) */
+function EmptyTable() {
+    return(
+        <SimpleBar style={{ maxHeight: 100, maxWidth: 850 }}>
+        <table>
+            <tr>
+                <th>time step</th>
+                <td></td>
+            </tr>
+            <tr>
+                <th>feature</th>
+                <td></td>
+            </tr>
+        </table>
+      </SimpleBar>
+    )
 }
 
-    // Close the dropdown menu if the user clicks outside of it
-    window.onclick = function (event) {
-        if (!event.target.matches(".keybtn")) {
-            var dropdowns = document.getElementsByClassName("key-content");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains("show")) {
-                    openDropdown.classList.remove("show");
-                }
+/** 
+ * helper arrow function for the NewFeatureTable function
+ * check if the index is in the range of the detected anomalies
+ */
+const checkIndex = (index) => {
+    var bool = false;
+    if (anomaly === true) {
+        var jsonAnomalies = JSON.parse(window.localStorage.getItem("detected_anomalies_json"));
+        var arr=jsonAnomalies["anomalies"][feature];
+      // var arr = [[30,100],[500,600]];
+       arr.forEach((val) => {
+        if (index >= val[0] && index < val[1]) {
+            bool = true;
+        }
+    })
+    }
+    return bool;
+}
+
+/** create a new table for the selected feature */
+function NewFeatureTable() {
+    var jsonInfo = JSON.parse(window.localStorage.getItem("json_info"));
+    if(anomaly) {
+        var jsonAnomalies = JSON.parse(window.localStorage.getItem("detected_anomalies_json"));
+    }
+    return(
+        <SimpleBar style={{ maxHeight: 200, maxWidth: 850 }}>
+        <table>
+            <tr>
+                <th>time step</th>
+                {Array.from({ length: jsonInfo[feature].length - 1 }).map((_, index) => (
+                    <td>{index}</td> 
+                ))}
+            </tr>
+            <tr>
+                <th>{feature}</th>
+                    {Array.from({ length: jsonInfo[feature].length - 1 }).map((_, index) => (
+                    checkIndex(index) ? <td className="td_anomaly">{jsonInfo[feature][index]}</td> :
+                    <td>{jsonInfo[feature][index]}</td>
+                ))}
+            </tr>
+            {anomaly ? <tr>
+                    <th>reason</th>
+                        {Array.from({ length: jsonInfo[feature].length - 1 }).map((_, index) => (
+                            <td>{jsonAnomalies["reason"][feature]}</td> 
+                        ))}
+            </tr> : <tr></tr> }
+        </table>
+      </SimpleBar>
+    )
+}
+
+/* When the user clicks on the button,
+    toggle between hiding and showing the features */
+function ToggleFeaturesButton() {
+    document.getElementById("myFeature").classList.toggle("show");
+}
+
+// Close the features list if the user clicks outside of it
+window.onclick = function (event) {
+    if (!event.target.matches(".featurebtn")) {
+        var dropdowns = document.getElementsByClassName("feature-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains("show")) {
+                openDropdown.classList.remove("show");
             }
         }
-    };
+    }
+};
 
 class Charts extends Component {
 
@@ -160,6 +240,7 @@ class Charts extends Component {
         };
     }
 
+    //when new file is uploaded
     newFile = () =>{
         this.setState({
             isNewFile: true,
@@ -167,10 +248,12 @@ class Charts extends Component {
         })
     }
 
+    //when the server returns an answer about the detected anomalies
     anomaly = () => {
         anomaly = true;
     }
 
+    //when a feature is selected
     change = () =>{
         this.setState({
             isChange: true,
@@ -181,33 +264,34 @@ class Charts extends Component {
 
     render() {
         const {isNewFile, isChange} = this.state;
+        //add event listeners
         window.addEventListener("newFileEvent", this.newFile);
         window.addEventListener("anomaliesDetected", this.anomaly);
         window.addEventListener("chartChanged", this.change);
         return (
-            <div className = "line_chart">
-                {!isNewFile && !isChange && <EmptyLineChart/>}
-                { isNewFile && <LineChartHelper/>}
-                { isChange && <LineChart/>}
+          <div>
+            <div className="line_chart">
+              {!isNewFile && !isChange && <EmptyLineChart />}
+              {isNewFile && <LineChartHelper />}
+              {isChange && <NewFeatureLineChart />}
 
-                
-                <div className="keys_list">
-                    <div className="keys">
-                        <button
-                            onClick={myFunction}
-                            className="keybtn"
-                        >
-                            Features List
-                        </button>
-                        <SimpleBar id="myKey"
-                            className="key-content"
-                        >
-                            <div></div>
-                        </SimpleBar>
-                    </div>
+              <div className="features_list">
+                <div className="features">
+                  <button onClick={ToggleFeaturesButton} className="featurebtn">
+                    Features List
+                  </button>
+                  <SimpleBar id="myFeature" className="feature-content">
+                    <div></div>
+                  </SimpleBar>
                 </div>
+              </div>
             </div>
-        )
+            <div className="table">
+                {((!isNewFile && !isChange) || isNewFile) && <EmptyTable />}
+                {isChange && <NewFeatureTable />}
+            </div>
+          </div>
+        );
     }
 }
 

@@ -73,7 +73,7 @@ const fileDrop = (e) => {
         //add global item
         var json =  JSON.stringify(parse_csv(reader.result));
         window.localStorage.setItem("json_info", json);
-        // Notify graphs that we got new file
+        // Notify charts that we got new file
         var newFileevent = new CustomEvent("newFileEvent");
         window.dispatchEvent(newFileevent);
         // set loading image
