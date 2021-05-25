@@ -1,31 +1,6 @@
 # Anomaly Detection WebApp
 
-## Installation
-1. Clone the repository
-```bash
-git clone https://github.com/Ella475/anomaly-detection-web-app.git
-```
-
-2. Install nodejs
-```bash
-sudo apt install nodejs
-```
-
-3. Install npm package manager
-```bash
-sudo apt install npm
-```
-
-4. Install all of the dependencies (inside directory of package.json)
-```bash
-pushd server; npm install; popd
-pushd client; npm install; popd
-```
-
-5. Install yarn
-```bash
-sudo npm install -g yarn
-```
+## Server
 
 ## Client
 
@@ -37,10 +12,46 @@ inside - according to the picture.<br /> Finally, in order to run the anomaly de
 model from the model list (which is arranged in numerical order) and then upload your anomaly-file
 to the right box.
 
-### Graphs And Tables
+### Graphical representation
+
+When you upload a train file the features list is updated. You can choose a feature from the list, and the graph and the table will display its data.<br />
+After uploading an anomaly file the feature's data will be updated according to the new file, if anomalies were detected they will be marked in red.<br />
+In order to see the reason for the anomalies, drag the mouse over the red points or look at the last row of the table.
+
+## Installations
+
+1. Clone the repository
+```bash
+git clone https://github.com/Ella475/anomaly-detection-web-app.git
+```
+
+2. Install nodejs
+[click to download](https://nodejs.org/en/)<br/>
+
+3. Install all of the dependencies (inside directory of package.json)
+```bash
+pushd server; npm install; popd
+pushd client; npm install; popd
+```
+
+4. Install yarn
+```bash
+npm install -g yarn
+```
+
+5. Install react-chartjs-2
+```bash
+npm install --save react-chartjs-2 chart.js
+```
+
+6. Install simplebar-react
+```bash
+npm install simplebar-react --save
+```
 
 ## Running The Application
-### In two different terminals:
+### In two different terminals
+
 Run the server
 ```bash
 cd server; npm start
@@ -50,3 +61,5 @@ Run the client
 ```bash
 cd client; yarn start
 ```
+
+## Links
