@@ -17,7 +17,7 @@ function parse_csv(csv_data) {
         result[j.toString() + "_" + headers[j]] = [];
     }
 
-    for (var i = 1; i < lines.length-1; i++) {
+    for (var i = 1; i < lines.length - 1; i++) {
         var current_line = lines[i].split(",").map(x=>parseFloat(x));
         for (var k = 0; k < headers.length; k++) {
             result[k.toString() + "_" + headers[k]].push(current_line[k]);

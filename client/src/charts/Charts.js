@@ -128,9 +128,37 @@ function NewFeatureLineChart() {
           usePointStyle: true,
           callbacks: {
             //if an anomaly was detected display the reason for the anomaly
-            footer: function (context) {
+            footer: (tooltipItems) => {
+              var index = tooltipItems[0].parsed.x;
+              var b = false;
+              var i = 0;
+              var spanIndex = 0;
               if (anomaly) {
-                return jsonAnomalies["reason"][feature];
+                arr.forEach((val) => {
+                  if (index >= val[0] && index < val[1]) {
+                    b = true;
+                    spanIndex = i;
+                  }
+                  i++;
+                });
+                if (b) {
+                  return (
+                    "anomaly reason: " +
+                    "\ncorrelated_feature: " +
+                    jsonAnomalies["reason"][feature][spanIndex][
+                      "correlated_feature"
+                    ] +
+                    "\ncorrelation_type: " +
+                    jsonAnomalies["reason"][feature][spanIndex][
+                      "correlation_type"
+                    ] +
+                    "\nspan_starting_deviation: " +
+                    jsonAnomalies["reason"][feature][spanIndex][
+                      "span_starting_deviation"
+                    ]
+                  );
+                }
+                return "";
               }
             },
           },
