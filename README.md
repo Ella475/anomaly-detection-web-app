@@ -25,7 +25,7 @@ In order to see the reason for the anomalies, drag the mouse over the red points
 git clone https://github.com/Ella475/anomaly-detection-web-app.git
 ```
 
-2. Install nodejs
+2. Install nodejs <br/>
 [click to download](https://nodejs.org/en/)<br/>
 
 3. Install all of the dependencies (inside directory of package.json)
