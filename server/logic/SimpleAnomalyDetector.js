@@ -62,7 +62,7 @@ class SimpleAnomalyDetector {
             let c = new Object();
             c.feature1 = f1;
             c.feature2 = f2;
-            c.corrlation = p;
+            c.correlation = p;
             c.lin_reg = linear_reg(ps, len);
             c.threshold = this.findThreshold(ps, len, c.lin_reg) * 1.1; // 10% increase
             this.cf.push(c);
@@ -81,7 +81,7 @@ class SimpleAnomalyDetector {
             if (!sequence) {
                 startTimes.push(anomaly.timeStep);
                 description = anomaly.description;
-                descriptions.push(description);
+                descriptions.push(anomaly.d);
                 sequence = true;
             } else if (
                 anomaly.description != description ||
@@ -89,7 +89,7 @@ class SimpleAnomalyDetector {
             ) {
                 startTimes.push(anomaly.timeStep);
                 description = anomaly.description;
-                descriptions.push(description);
+                descriptions.push(anomaly.d);
                 endTimes.push(prevTimeStep + 1);
             }
             prevTimeStep = anomaly.timeStep;
@@ -152,7 +152,7 @@ class SimpleAnomalyDetector {
                         correlation: c.correlation,
                         deviation: this.deviation(x[i], y[i], c),
                     };
-                    v.push({ description: d, timeStep: i + 1 });
+                    v.push({ description: c.feature1 + c.feature2, timeStep: i + 1, d: d });
                 }
             }
         }
