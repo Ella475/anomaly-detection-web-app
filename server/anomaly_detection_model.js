@@ -42,6 +42,7 @@ class anomaly_detection_model {
   }
 
   async learn_async(model_id, ts) {
+    // this.sleep(10000);
     this.models[model_id].learnNormal(ts);
   }
 
@@ -111,6 +112,7 @@ class anomaly_detection_model {
   }
 
   async detect_async(model_id, ts, detect_id) {
+    // this.sleep(10000);
     this.pending_detections[detect_id] = this.models[model_id].detect(ts);
   }
 
