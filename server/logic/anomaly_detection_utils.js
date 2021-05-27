@@ -1,5 +1,6 @@
 const Line = require("./Shapes");
 
+// find avarage of array
 function avg(x, size) {
     let sum = 0;
     for (let i = 0; i < size; sum += x[i], i++);

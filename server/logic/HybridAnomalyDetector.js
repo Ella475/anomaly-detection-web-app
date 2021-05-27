@@ -6,6 +6,7 @@ class HybridAnomalyDetector extends SimpleAnomalyDetector {
         super();
     }
 
+    // helper function for learning
     learnHelper(ts, p /*pearson*/, f1, f2, ps) {
         super.learnHelper(ts, p, f1, f2, ps);
         if (p > 0.5 && p < this.threshold) {
@@ -21,6 +22,7 @@ class HybridAnomalyDetector extends SimpleAnomalyDetector {
         }
     }
 
+    // is the new point an anomaly
     isAnomalous(x, y, c) {
         return (
             (c.correlation >= this.threshold && super.isAnomalous(x, y, c)) ||
@@ -30,6 +32,7 @@ class HybridAnomalyDetector extends SimpleAnomalyDetector {
         );
     }
 
+    // check deviation from line or circle
     deviation(x, y, c) {
         if (c.correlation >= this.threshold) return super.deviation(x, y, c);
         return Math.round(100 * (Math.hypot(c.cx - x, c.cy - y) / c.threshold));

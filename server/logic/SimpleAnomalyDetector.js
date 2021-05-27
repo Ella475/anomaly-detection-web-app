@@ -7,6 +7,7 @@ class SimpleAnomalyDetector {
         this.attributes;
     }
 
+    // turn x, y vectors to points
     toPoints(x, y) {
         let ps = [];
         for (let i = 0; i < x.length; i++) {
@@ -15,6 +16,7 @@ class SimpleAnomalyDetector {
         return ps;
     }
 
+    // find max deviation from line
     findThreshold(ps, len, rl) {
         let max = 0;
         for (let i = 0; i < len; i++) {
@@ -24,6 +26,7 @@ class SimpleAnomalyDetector {
         return max;
     }
 
+    // find correlation between features and their threshold
     learnNormal(ts) {
         this.attributes = ts.getAttributes();
         let atts = this.attributes;
@@ -56,6 +59,7 @@ class SimpleAnomalyDetector {
         }
     }
 
+    // helper method
     learnHelper(ts, p /*pearson*/, f1, f2, ps) {
         if (p > this.threshold) {
             let len = ts.getRowSize();
@@ -69,6 +73,7 @@ class SimpleAnomalyDetector {
         }
     }
 
+    // turn anomaly reports to span of anomalies
     arToSpan(ar, anomaly_attributes) {
         let startTimes = [];
         let endTimes = [];
@@ -77,6 +82,7 @@ class SimpleAnomalyDetector {
 
         let prevTimeStep;
         let sequence = false;
+        // combine concecutive anomalies
         for (const anomaly of ar) {
             if (!sequence) {
                 startTimes.push(anomaly.timeStep);
@@ -103,7 +109,7 @@ class SimpleAnomalyDetector {
             anomalies[attr] = [];
             reason[attr] = [];
         }
-
+        // create a reason for each span
         for (let i = 0; i < startTimes.length; i++) {
             description = descriptions[i];
             let f1 = description.f1;
@@ -130,9 +136,11 @@ class SimpleAnomalyDetector {
         return { anomalies: anomalies, reason: reason };
     }
 
+    // detect anomalies in timeseries
     detect(ts) {
         let v = [];
         let anomaly_attributes = ts.getAttributes();
+        // for each pair of correlated features run on all points and check anomaly
         for (const c of this.cf) {
             let x = ts.getAttributeData(c.feature1);
             let y = ts.getAttributeData(c.feature2);
@@ -157,13 +165,16 @@ class SimpleAnomalyDetector {
                 }
             }
         }
+        // combine anomalies to span
         return this.arToSpan(v, anomaly_attributes);
     }
 
+    // check if a point is anomaly
     isAnomalous(x, y, c) {
         return Math.abs(y - c.lin_reg.f(x)) > c.threshold;
     }
 
+    // deviation from line or circle
     deviation(x, y, c) {
         return Math.round(100 * (Math.abs(y - c.lin_reg.f(x)) / c.threshold));
     }
