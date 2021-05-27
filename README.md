@@ -22,22 +22,21 @@ In order to see the reason for the anomalies, drag the mouse over the red points
 
 1. Clone the repository
 ```bash
-git clone https://github.com/Ella475/anomaly-detection-web-app.git
+git clone https://github.com/Ella475/anomaly-detection-web-app.git .
 ```
 
-2. Install nodejs <br/>
-[click to download](https://nodejs.org/en/)<br/>
+2. Install nodejs <br/>[click to download](https://nodejs.org/en/)<br/>
 
-3. Install all of the dependencies (inside directory of package.json)
-```bash
-pushd server; npm install; popd
-pushd client; npm install; popd
-```
-
-4. Install yarn
+3. Install yarn
 ```bash
 npm install -g yarn
 ```
+
+4. Install all of the dependencies (inside directory of package.json)
+```bash
+pushd server; npm install; popd
+pushd client; yarn install; popd
+``` 
 
 
 ## Running The Application
