@@ -39,15 +39,6 @@ pushd client; npm install; popd
 npm install -g yarn
 ```
 
-5. Install react-chartjs-2
-```bash
-npm install --save react-chartjs-2 chart.js
-```
-
-6. Install simplebar-react
-```bash
-npm install simplebar-react --save
-```
 
 ## Running The Application
 ### In two different terminals
