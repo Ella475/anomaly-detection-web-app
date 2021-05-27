@@ -69,7 +69,7 @@ class SimpleAnomalyDetector {
         }
     }
 
-    arToSpan(ar) {
+    arToSpan(ar, anomaly_attributes) {
         let startTimes = [];
         let endTimes = [];
         let descriptions = [];
@@ -99,7 +99,7 @@ class SimpleAnomalyDetector {
         let anomalies = {};
         let reason = {};
 
-        for (const attr of this.attributes) {
+        for (const attr of anomaly_attributes) {
             anomalies[attr] = [];
             reason[attr] = [];
         }
@@ -132,6 +132,7 @@ class SimpleAnomalyDetector {
 
     detect(ts) {
         let v = [];
+        let anomaly_attributes = ts.getAttributes();
         for (const c of this.cf) {
             let x = ts.getAttributeData(c.feature1);
             let y = ts.getAttributeData(c.feature2);
@@ -156,7 +157,7 @@ class SimpleAnomalyDetector {
                 }
             }
         }
-        return this.arToSpan(v);
+        return this.arToSpan(v, anomaly_attributes);
     }
 
     isAnomalous(x, y, c) {
