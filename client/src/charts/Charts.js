@@ -10,6 +10,7 @@ import "simplebar/dist/simplebar.min.css";
 var feature = "";
 var anomaly = false;
 var exist = false;
+var spanIdx = 0;
 
 /** display an empty line chart (before a file is uploaded) */
 function EmptyLineChart(){
@@ -67,6 +68,27 @@ function LineChartHelper(){
     }
     exist = true;
     return <Line data={data}></Line>    
+}
+
+/** 
+ * helper function for NewFeatureLineChart and NewFeatureTable.
+ * return a string that describes the reason for the anomaly.
+ */
+function displayReason(spanIndex) {
+    var jsonAnomalies = JSON.parse(
+      window.localStorage.getItem("detected_anomalies_json")
+    );
+    return (
+      "anomaly reason: " +
+      "\ncorrelated_feature: " +
+      jsonAnomalies["reason"][feature][spanIndex]["correlated_feature"] +
+      "\ncorrelation: " +
+      jsonAnomalies["reason"][feature][spanIndex]["correlation"] +
+      "\ncorrelation_type: " +
+      jsonAnomalies["reason"][feature][spanIndex]["correlation_type"] +
+      "\nspan_starting_deviation: " +
+      jsonAnomalies["reason"][feature][spanIndex]["span_starting_deviation"]
+    );
 }
 
 /** create a new line chart for the selected feature */
@@ -130,36 +152,7 @@ function NewFeatureLineChart() {
             //if an anomaly was detected display the reason for the anomaly
             footer: (tooltipItems) => {
               var index = tooltipItems[0].parsed.x;
-              var b = false;
-              var i = 0;
-              var spanIndex = 0;
-              if (anomaly) {
-                arr.forEach((val) => {
-                  if (index >= val[0] && index < val[1]) {
-                    b = true;
-                    spanIndex = i;
-                  }
-                  i++;
-                });
-                if (b) {
-                  return (
-                    "anomaly reason: " +
-                    "\ncorrelated_feature: " +
-                    jsonAnomalies["reason"][feature][spanIndex][
-                      "correlated_feature"
-                    ] +
-                    "\ncorrelation_type: " +
-                    jsonAnomalies["reason"][feature][spanIndex][
-                      "correlation_type"
-                    ] +
-                    "\nspan_starting_deviation: " +
-                    jsonAnomalies["reason"][feature][spanIndex][
-                      "span_starting_deviation"
-                    ]
-                  );
-                }
-                return "";
-              }
+              return anomaly && checkIndex(index) ? displayReason(spanIdx) : "";
             },
           },
         },
@@ -192,15 +185,18 @@ function EmptyTable() {
  */
 const checkIndex = (index) => {
     var bool = false;
+    var i = 0;
     if (anomaly === true) {
         var jsonAnomalies = JSON.parse(window.localStorage.getItem("detected_anomalies_json"));
-        var arr=jsonAnomalies["anomalies"][feature];
+        var arr = jsonAnomalies["anomalies"][feature];
       // var arr = [[30,100],[500,600]];
-       arr.forEach((val) => {
-        if (index >= val[0] && index < val[1]) {
-            bool = true;
-        }
-    })
+        arr.forEach((val) => {
+            if (index >= val[0] && index < val[1]) {
+                bool = true;
+                spanIdx = i;
+            }
+            i++;
+        })
     }
     return bool;
 }
@@ -208,9 +204,6 @@ const checkIndex = (index) => {
 /** create a new table for the selected feature */
 function NewFeatureTable() {
     var jsonInfo = JSON.parse(window.localStorage.getItem("json_info"));
-    if(anomaly) {
-        var jsonAnomalies = JSON.parse(window.localStorage.getItem("detected_anomalies_json"));
-    }
     return(
         <SimpleBar style={{ maxHeight: 200, maxWidth: 850 }}>
         <table>
@@ -226,13 +219,13 @@ function NewFeatureTable() {
                     checkIndex(index) ? <td className="td_anomaly">{jsonInfo[feature][index]}</td> :
                     <td>{jsonInfo[feature][index]}</td>
                 ))}
-            </tr>
-            {anomaly ? <tr>
+                </tr>
+                 {anomaly ? <tr>
                     <th>reason</th>
                         {Array.from({ length: jsonInfo[feature].length - 1 }).map((_, index) => (
-                            <td>{jsonAnomalies["reason"][feature]}</td> 
+                            checkIndex(index) ? <td>{displayReason(spanIdx)}</td>:<td></td>   
                         ))}
-            </tr> : <tr></tr> }
+            </tr> : <tr></tr> } 
         </table>
       </SimpleBar>
     )
