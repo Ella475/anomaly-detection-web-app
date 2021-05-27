@@ -9,7 +9,6 @@ import "simplebar/dist/simplebar.min.css";
 //global variables
 var feature = "";
 var anomaly = false;
-var exist = false;
 var spanIdx = 0;
 
 /** display an empty line chart (before a file is uploaded) */
@@ -41,32 +40,32 @@ function LineChartHelper(){
         },
       ],
     };
-    var i=0;
+    var i = 0;
+    //initialize the keys list
+    const myNode = document.getElementsByClassName("simplebar-content")[0];
+    myNode.textContent = '';
     //add all keys to keys list
-    if (!exist) {
-        keys.forEach((key) => {
-            var i = 0;
-            // set the feature-list in the variable 'feature_list_element'
-            var feature_list_element = document.getElementsByClassName("simplebar-content")[0];
-            var new_feature_name_element = document.createElement("a");
-            new_feature_name_element.href = "#";
-            new_feature_name_element.text = key;
-            // handel choosing something from the features list
-            new_feature_name_element.onclick = function (e) {
-                e.preventDefault();
-                // change featurebtn-id to feature's name
-                document.getElementsByClassName("featurebtn")[0].id = key;
-                //save the key in global variable 'feature'
-                feature = key;
-                //add a new event when the user clicks to change the feature
-                var newFeatureEvent = new CustomEvent("chartChanged");
-                window.dispatchEvent(newFeatureEvent);
-            };  
-            // add the feature to the list
-            feature_list_element.appendChild(new_feature_name_element);
-        });
-    }
-    exist = true;
+    keys.forEach((key) => {
+        var i = 0;
+        // set the feature-list in the variable 'feature_list_element'
+        var feature_list_element = document.getElementsByClassName("simplebar-content")[0];
+        var new_feature_name_element = document.createElement("a");
+        new_feature_name_element.href = "#";
+        new_feature_name_element.text = key;
+        // handel choosing something from the features list
+        new_feature_name_element.onclick = function (e) {
+            e.preventDefault();
+            // change featurebtn-id to feature's name
+            document.getElementsByClassName("featurebtn")[0].id = key;
+            //save the key in global variable 'feature'
+            feature = key;
+            //add a new event when the user clicks to change the feature
+            var newFeatureEvent = new CustomEvent("chartChanged");
+            window.dispatchEvent(newFeatureEvent);
+        };  
+        // add the feature to the list
+        feature_list_element.appendChild(new_feature_name_element);
+    });
     return <Line data={data}></Line>    
 }
 
@@ -189,7 +188,6 @@ const checkIndex = (index) => {
     if (anomaly === true) {
         var jsonAnomalies = JSON.parse(window.localStorage.getItem("detected_anomalies_json"));
         var arr = jsonAnomalies["anomalies"][feature];
-      // var arr = [[30,100],[500,600]];
         arr.forEach((val) => {
             if (index >= val[0] && index < val[1]) {
                 bool = true;
@@ -262,7 +260,8 @@ class Charts extends Component {
     }
 
     //when new file is uploaded
-    newFile = () =>{
+    newFile = () => {
+        anomaly = false;
         this.setState({
             isNewFile: true,
             isChange: false
@@ -275,7 +274,7 @@ class Charts extends Component {
     }
 
     //when a feature is selected
-    change = () =>{
+    change = () => {
         this.setState({
             isChange: true,
             isNewFile: false,
