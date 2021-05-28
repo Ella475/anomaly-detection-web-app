@@ -3,11 +3,11 @@
   background-color: rgb(255, 255, 255);
   display: flex;
   width: 850px;
-  position: absolute;
   top: 450px;
   left: 250px;
-
+  margin-top: 5%;
 }
+
  /* define the anomalies data cell */
 .td_anomaly {
   background:rgb(255, 99, 132);
@@ -15,6 +15,7 @@
   transition: 0.4s ease-out, color 0.4s ease-out;
   cursor: pointer;
 }
+
 .td_anomaly:first-of-type:hover {
   background: #112;
   color: rgb(255, 99, 132);
@@ -24,11 +25,24 @@
 /* define the table zone */
 .table {
   background-color: rgb(255, 255, 255);
-  position: absolute;
   width: 850px;
-  top:900px;
+  top: 900px;
   left: 250px;
+  margin-top: 5%;
+
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 1px solid #ddd;
 }
+
+th, td {
+  text-align: left;
+  padding: 15px;
+  border: 1px solid rgb(255, 255, 255);
+}
+
+tr:nth-child(odd){background-color: #f2f2f2}
+tr:nth-child(even){background-color: #f2f2f2}
 
 /* feature Button */
 .featurebtn {
@@ -55,12 +69,12 @@
 .features {
   position: relative;
   display: inline-block;
+  margin-left: 5%;
 }
 
 /* feature Content (Hidden by Default) */
 .feature-content {
   display: none;
-  position: absolute;
   background-color: #bff8ff;
   min-width: 200px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);

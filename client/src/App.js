@@ -122,7 +122,9 @@ function App() {
                     </div>
                 </div>
                 <div className="row">
-                    <Charts />
+                    <div className="column">
+                        <Charts />
+                    </div>
                 </div>
             </div>
         </div>

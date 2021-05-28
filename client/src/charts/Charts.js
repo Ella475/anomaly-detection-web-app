@@ -205,6 +205,7 @@ function NewFeatureTable() {
     return(
         <SimpleBar style={{ maxHeight: 200, maxWidth: 850 }}>
         <table>
+            <tbody>
             <tr>
                 <th>time step</th>
                 {Array.from({ length: jsonInfo[feature].length - 1 }).map((_, index) => (
@@ -221,9 +222,10 @@ function NewFeatureTable() {
                  {anomaly ? <tr>
                     <th>reason</th>
                         {Array.from({ length: jsonInfo[feature].length - 1 }).map((_, index) => (
-                            checkIndex(index) ? <td>{displayReason(spanIdx)}</td>:<td></td>   
+                            checkIndex(index) ? <td> {displayReason(spanIdx)}</td>:<td></td>
                         ))}
             </tr> : <tr></tr> } 
+            </tbody>
         </table>
       </SimpleBar>
     )
