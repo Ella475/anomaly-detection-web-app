@@ -1,0 +1,104 @@
+/* define the line chart zone */
+.line_chart {
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  width: 850px;
+  top: 450px;
+  left: 250px;
+  margin-top: 5%;
+}
+
+ /* define the anomalies data cell */
+.td_anomaly {
+  background:rgb(255, 99, 132);
+  color: #112;
+  transition: 0.4s ease-out, color 0.4s ease-out;
+  cursor: pointer;
+}
+
+.td_anomaly:first-of-type:hover {
+  background: #112;
+  color: rgb(255, 99, 132);
+  transition: 0.4s ease-in, color 0.4s ease-in;
+}
+
+/* define the table zone */
+.table {
+  background-color: rgb(255, 255, 255);
+  width: 850px;
+  top: 900px;
+  left: 250px;
+  margin-top: 5%;
+
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+}
+
+th, td {
+  text-align: left;
+  padding: 15px;
+  border: 1px solid rgb(255, 255, 255);
+}
+
+tr:nth-child(odd){background-color: #f2f2f2}
+tr:nth-child(even){background-color: #f2f2f2}
+
+/* feature Button */
+.featurebtn {
+  background-color: #007bff;
+  border-radius: 0.25rem;
+  color: white;
+  cursor: pointer;
+  border: 1px solid transparent;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  font-weight: 400;
+  width: 150px;
+}
+
+/* feature button on hover & focus */
+.featurebtn:hover,
+.featurebtn:focus {
+  background-color: #2980b9;
+  transition: color 0.15s;
+}
+
+.features {
+  position: relative;
+  display: inline-block;
+  margin-left: 5%;
+}
+
+/* feature Content (Hidden by Default) */
+.feature-content {
+  display: none;
+  background-color: #bff8ff;
+  min-width: 200px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: 0.25rem;
+  max-height: 300px;
+}
+
+/* links inside the feature */
+.feature-content a {
+  color: black;
+  padding: 12px 16px;
+  border-radius: 0.25rem;
+  text-decoration: none;
+  display: block;
+  min-width: 200px;
+}
+
+/* change color of feature links on hover */
+.feature-content a:hover {
+  background-color: rgb(96, 205, 255);
+}
+
+/* show the features list */
+.show {
+  display: block;
+}

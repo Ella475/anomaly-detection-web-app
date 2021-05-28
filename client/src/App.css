@@ -1,7 +1,6 @@
 body {
     background-image: url("/src/images/background.png");
     background-color: #cccccc;
-    background-repeat: no-repeat;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;

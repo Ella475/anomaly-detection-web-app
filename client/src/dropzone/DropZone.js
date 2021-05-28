@@ -17,7 +17,7 @@ function parse_csv(csv_data) {
         result[j.toString() + "_" + headers[j]] = [];
     }
 
-    for (var i = 1; i < lines.length-1; i++) {
+    for (var i = 1; i < lines.length - 1; i++) {
         var current_line = lines[i].split(",").map(x=>parseFloat(x));
         for (var k = 0; k < headers.length; k++) {
             result[k.toString() + "_" + headers[k]].push(current_line[k]);
@@ -70,6 +70,12 @@ const fileDrop = (e) => {
         } else {
             return;
         }
+        //add global item
+        var json =  JSON.stringify(parse_csv(reader.result));
+        window.localStorage.setItem("json_info", json);
+        // Notify charts that we got new file
+        var newFileevent = new CustomEvent("newFileEvent");
+        window.dispatchEvent(newFileevent);
         // set loading image
         icon.style.background = "url(" + loading + ") no-repeat center center";
         icon.style.backgroundSize = "100%";
@@ -113,7 +119,7 @@ const fileDrop = (e) => {
                 if (e.target.id === "train") {
                     // Add model_id to model_list
                     var model_list_element =
-                        document.getElementsByClassName("simplebar-content")[0];
+                        document.getElementsByClassName("dropdown")[0].getElementsByClassName("simplebar-content")[0];
                     var new_model_id_element = document.createElement("a");
                     new_model_id_element.href = "#";
                     new_model_id_element.text =
@@ -130,8 +136,12 @@ const fileDrop = (e) => {
                     // add to list
                     model_list_element.appendChild(new_model_id_element);
                 } else if (e.target.id === "anomaly") {
-                    // TODO: Parse response JSON to graph view - Tal & Noam part
-                    alert(JSON.stringify(response_json));
+                    // Save result in local storage
+                    window.localStorage.setItem("detected_anomalies_json", JSON.stringify(response_json["res"]));
+
+                    // Notify graphs that we got the anomalies
+                    var event = new CustomEvent("anomaliesDetected");
+                    window.dispatchEvent(event);
                 }
             }
         };
@@ -152,7 +162,7 @@ class DropZone extends Component {
                 >
                     <div id={this.props.id} className="drop-message">
                         <div className="upload-icon" />
-                        Drag & Drop files here or click to upload
+                        Drag & Drop files here
                     </div>
                 </div>
             </div>

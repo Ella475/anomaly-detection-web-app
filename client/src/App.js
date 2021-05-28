@@ -7,6 +7,7 @@ import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 
 import "./App.css";
+import Charts from "./charts/Charts";
 
 function App() {
     function handleClick(e) {
@@ -39,7 +40,7 @@ function App() {
 
             var response_json = JSON.parse(xhr.response);
             var model_list_element =
-                document.getElementsByClassName("simplebar-content")[0];
+                document.getElementsByClassName("dropdown")[0].getElementsByClassName("simplebar-content")[0];
             for (var i = 0; i < model_list_element.children.length; i++) {
                 var text =
                     model_list_element.children[i].innerText.split(" - ")[0];
@@ -118,6 +119,11 @@ function App() {
                                 </SimpleBar>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="column">
+                        <Charts />
                     </div>
                 </div>
             </div>
