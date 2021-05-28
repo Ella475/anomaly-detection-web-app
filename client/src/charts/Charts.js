@@ -42,13 +42,13 @@ function LineChartHelper(){
     };
     var i = 0;
     //initialize the keys list
-    const myNode = document.getElementsByClassName("simplebar-content")[0];
+    const myNode = document.getElementsByClassName("features")[0].getElementsByClassName("simplebar-content")[0];
     myNode.textContent = '';
     //add all keys to keys list
     keys.forEach((key) => {
         var i = 0;
         // set the feature-list in the variable 'feature_list_element'
-        var feature_list_element = document.getElementsByClassName("simplebar-content")[0];
+        var feature_list_element = myNode;
         var new_feature_name_element = document.createElement("a");
         new_feature_name_element.href = "#";
         new_feature_name_element.text = key;
