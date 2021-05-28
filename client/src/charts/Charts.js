@@ -93,11 +93,6 @@ function displayReason(spanIndex) {
 /** create a new line chart for the selected feature */
 function NewFeatureLineChart() {
     var jsonInfo = JSON.parse(window.localStorage.getItem("json_info"));
-    //if we got response from the server about potential anomalies
-    if (anomaly === true) {
-        var jsonAnomalies = JSON.parse(window.localStorage.getItem("detected_anomalies_json"));
-        var arr=jsonAnomalies["anomalies"][feature];
-    }
     //set the data for the line chart
     let data = {
         labels: Array.from(Array(jsonInfo[feature].length).keys()),
@@ -111,7 +106,10 @@ function NewFeatureLineChart() {
                 pointBackgroundColor: function(context) {
                     var index = context.dataIndex;
                     var b = false;
+                    //if we got response from the server about potential anomalies
                     if (anomaly === true) {
+                        var jsonAnomalies = JSON.parse(window.localStorage.getItem("detected_anomalies_json"));
+                        var arr=jsonAnomalies["anomalies"][feature];
                         arr.forEach((val) => {
                             if (index >= val[0] && index < val[1]) {
                                 b = true;
@@ -124,7 +122,10 @@ function NewFeatureLineChart() {
                 pointBorderColor: function(context) {
                     var index = context.dataIndex;
                     var b = false;
+                    //if we got response from the server about potential anomalies
                     if (anomaly === true) {
+                        var jsonAnomalies = JSON.parse(window.localStorage.getItem("detected_anomalies_json"));
+                        var arr=jsonAnomalies["anomalies"][feature];
                         arr.forEach((val) => {
                             if (index >= val[0] && index < val[1]) {
                                 b = true;
@@ -163,7 +164,7 @@ function NewFeatureLineChart() {
 /** display an empty table (before a file is uploaded) */
 function EmptyTable() {
     return(
-        <SimpleBar style={{ maxHeight: 100, maxWidth: 850 }}>
+        <SimpleBar style={{ maxHeight: 200, maxWidth: 850 }}>
         <table>
             <tr>
                 <th>time step</th>
