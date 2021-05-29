@@ -22,11 +22,6 @@ In order to see the reason for the anomalies, drag the mouse over the red points
 the "src" folder contains two main folders - dropZone and charts, and additional files such as app.js, app.css and package.json. 
 
 ## Server
-### The api
-The server implements a RESTful api, foollowing:
-![Alt text](images/api.PNG?raw=true)
-The included data types are:
-![Alt text](images/Doc1-1.png?raw=true)
 ### Main Files
 app.js contains the implementation of the api.
 the folder "logic" conatains the code for the the algorithm that learns a new model, and detect anomalies on it.
