@@ -57,11 +57,21 @@ const fileDrop = (e) => {
         if (e.target.id === "train") {
             var model_type =
                 document.getElementsByClassName("detector_buttons").id;
+            if (!model_type) {
+                // Must choose detection type
+                alert("Please choose a detection type")
+                return;
+            }
             params = new URLSearchParams({ model_type: model_type });
             body = JSON.stringify({ train_data: parse_csv(reader.result) });
             api_req = "model";
         } else if (e.target.id === "anomaly") { // if the file is for anomaly
             var model_id = document.getElementsByClassName("dropbtn")[0].id;
+            if (!model_id) {
+                // Must choose model id
+                alert("Please choose a model id")
+                return;
+            }
             // set request details
             params = new URLSearchParams({ model_id: model_id });
             // convert to json file
