@@ -71,3 +71,4 @@ cd client; yarn start
 
 [uml diagram](https://github.com/Ella475/anomaly-detection-web-app/blob/master/uml.png)<br/>
 [a short video that shows how to use the app](https://streamable.com/rl07wj)<br/>
+[a short video that demonstrates the user stories](https://streamable.com/tfa38m)<br/>
